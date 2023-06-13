@@ -1,0 +1,11 @@
+SHOW CONTROLLER
+
+Fabric Name          : {{ fabricNode.imdata.0.topSystem.attributes.fabricDomain}} 
+Cluster Size         : {{ fabricNode.totalCount }} 
+Time Difference      : {{ fabricNode.imdata.0.topSystem.attributes.clusterTimeDiff }} 
+
+ ID              Pod   Address          In-Band IPv4     In-Band IPv6               OOB IPv4         OOB IPv6                        Version             Serial Number   
+
+ {% for node in fabricNode.imdata %}
+ {{ node.topSystem.attributes.id }} {{ node.topSystem.attributes.podId }}   {{ node.topSystem.attributes.address }}          {{ node.topSystem.attributes.inbMgmtAddr }}     {{ node.topSystem.attributes.inbMgmtAddr6 }}               {{ node.topSystem.attributes.oobMgmtAddr }}         {{ node.topSystem.attributes.oobMgmtAddr6 }}                        {{ node.topSystem.attributes.version }}             {{ node.topSystem.attributes.serial }} 
+ {% endfor %}

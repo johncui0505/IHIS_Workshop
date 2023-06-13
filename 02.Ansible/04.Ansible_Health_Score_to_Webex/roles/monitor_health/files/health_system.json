@@ -1,0 +1,28 @@
+{
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3"
+    },
+    "changed": false,
+    "failed": false,
+    "imdata": [
+        {
+            "fabricHealthTotal": {
+                "attributes": {
+                    "childAction": "",
+                    "chng": "1",
+                    "cur": "81",
+                    "dn": "topology/health",
+                    "lcOwn": "local",
+                    "maxSev": "info",
+                    "modTs": "2023-06-13T17:46:35.312+00:00",
+                    "prev": "80",
+                    "status": "",
+                    "twScore": "0",
+                    "updTs": "2023-06-13T17:46:28.349+00:00"
+                }
+            }
+        }
+    ],
+    "status": 200,
+    "totalCount": 1
+}

@@ -1,0 +1,54 @@
+---
+- hosts: aci
+  connection: local
+  gather_facts: no
+
+  vars:
+    apic_info: &apic_info
+      host:           "{{ aci_host }}"
+      user:           "{{ aci_user }}"
+      password:       "{{ aci_password }}"
+      validate_certs: "{{ aci_valid_cert }}" 
+      use_ssl:        "{{ aci_use_ssl }}" 
+
+  tasks:
+    - name: "1] API Request - Query all interface data"
+      aci_rest:
+        <<: *apic_info
+        path: /api/class/ethpmPhysIf.json
+        method: get
+      register: ethpmPhysIf
+
+    - name: "2] API Request - Interface details (Only 10 for time saving)"
+      aci_rest:
+        <<: *apic_info
+        path: /api/class/l1PhysIf.json?page-size=10     # ?page-size limit return data size
+        method: get
+      register: l1PhysIf
+
+    - name: "3] API Request - Interface error info "
+      aci_rest:
+        <<: *apic_info
+        path: "/api/node/mo/{{ item }}.json?query-target=children&target-subtree-class=rmonDot3Stats&target-subtree-class=rmonDot1d&target-subtree-class=rmonEtherStats"
+        method: get
+      register: rmon
+      with_items:
+        - "{{ l1PhysIf | json_query('imdata[].l1PhysIf.attributes.dn') }}"
+
+    - name: "4] Save to JSON"
+      copy:
+        content: "{{ item.content | to_nice_json}}"
+        dest:    "{{ item.dest }}"
+      no_log: yes
+      loop:
+        - content:  "{{ ethpmPhysIf | json_query('imdata[].ethpmPhysIf.attributes.{dn:dn, operSt:operSt, operMode:operMode, operSpeed:operSpeed, operDuplex:operDuplex}') }}"
+          dest:     interface_status.json
+        - content:  "{{ rmon | json_query('results[].{item:item, imdata:imdata[]}') }}" 
+          dest:     interfaces_error_counters.json
+
+    - name: "5] JSON convert to Excel (Python)"
+      command: python3 files/"{{ item }}"
+      loop:
+        - json2xlsx.py
+        - json2xlsx_err.py
+

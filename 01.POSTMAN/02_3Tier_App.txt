@@ -1,0 +1,235 @@
+=======================
+CreateTenant
+POST https://{{apic}}/api/node/mo/uni/tn-{{tenant}}.json
+BODY:
+{
+    "fvTenant": {
+        "attributes": {
+            "dn": "uni/tn-{{tenant}}",
+            "name": "{{tenant}}",
+            "rn": "tn-{{tenant}}",
+            "status": "created"
+        },
+        "children": []
+    }
+}
+=======================
+
+=======================
+CreateVRF
+POST https://{{apic}}/api/node/mo/uni/tn-{{tenant}}/ctx-{{tenant}}-Prod.json
+BODY:
+{
+    "fvCtx": {
+        "attributes": {
+            "dn": "uni/tn-{{tenant}}/ctx-{{tenant}}-Prod",
+            "name": "{{tenant}}-Prod",
+            "rn": "ctx-{{tenant}}-Prod",
+            "status": "created"
+        },
+        "children": []
+    }
+}
+=======================
+
+=======================
+BD-DB
+POST https://{{apic}}/api/node/mo/uni/tn-{{tenant}}/BD-DB.json
+BODY:
+{
+    "fvBD": {
+        "attributes": {
+            "dn": "uni/tn-{{tenant}}/BD-DB",
+            "mac": "00:22:BD:F8:19:FF",
+            "name": "DB",
+            "rn": "BD-DB",
+            "status": "created"
+        },
+        "children": [
+            {
+                "fvSubnet": {
+                    "attributes": {
+                        "dn": "uni/tn-{{tenant}}/BD-DB/subnet-[10.5.2.1/24]",
+                        "ctrl": "",
+                        "ip": "10.5.2.1/24",
+                        "rn": "subnet-[10.5.2.1/24]",
+                        "status": "created"
+                    },
+                    "children": []
+                }
+            },
+            {
+                "fvRsCtx": {
+                    "attributes": {
+                        "tnFvCtxName": "{{tenant}}-Prod",
+                        "status": "created,modified"
+                    },
+                    "children": []
+                }
+            }
+        ]
+    }
+}
+=======================
+
+=======================
+BD-WEB
+POST https://{{apic}}/api/node/mo/uni/tn-{{tenant}}/BD-WEB.json
+BODY:
+{
+    "fvBD": {
+        "attributes": {
+            "dn": "uni/tn-{{tenant}}/BD-WEB",
+            "mac": "00:22:BD:F8:19:FF",
+            "name": "WEB",
+            "rn": "BD-WEB",
+            "status": "created"
+        },
+        "children": [
+            {
+                "fvSubnet": {
+                    "attributes": {
+                        "dn": "uni/tn-{{tenant}}/BD-WEB/subnet-[10.5.1.1/24]",
+                        "ctrl": "",
+                        "ip": "10.5.1.1/24",
+                        "rn": "subnet-[10.5.1.1/24]",
+                        "status": "created"
+                    },
+                    "children": []
+                }
+            },
+            {
+                "fvRsCtx": {
+                    "attributes": {
+                        "tnFvCtxName": "{{tenant}}-Prod",
+                        "status": "created,modified"
+                    },
+                    "children": []
+                }
+            }
+        ]
+    }
+}
+
+=======================
+
+=======================
+BD-APP
+POST https://{{apic}}/api/node/mo/uni/tn-{{tenant}}/BD-APP.json
+BODY:
+{
+    "fvBD": {
+        "attributes": {
+            "dn": "uni/tn-{{tenant}}/BD-APP",
+            "mac": "00:22:BD:F8:19:FF",
+            "name": "APP",
+            "rn": "BD-APP",
+            "status": "created"
+        },
+        "children": [
+            {
+                "fvSubnet": {
+                    "attributes": {
+                        "dn": "uni/tn-{{tenant}}/BD-APP/subnet-[10.5.3.1/24]",
+                        "ctrl": "",
+                        "ip": "10.5.3.1/24",
+                        "rn": "subnet-[10.5.3.1/24]",
+                        "status": "created"
+                    },
+                    "children": []
+                }
+            },
+            {
+                "fvRsCtx": {
+                    "attributes": {
+                        "tnFvCtxName": "{{tenant}}-Prod",
+                        "status": "created,modified"
+                    },
+                    "children": []
+                }
+            }
+        ]
+    }
+}
+=======================
+
+=======================
+CreateANP
+POST https://{{apic}}/api/node/mo/uni/tn-{{tenant}}/ap-BigApp.json
+BODY:
+{
+    "fvAp": {
+        "attributes": {
+            "dn": "uni/tn-{{tenant}}/ap-BigApp",
+            "name": "BigApp",
+            "rn": "ap-BigApp",
+            "status": "created"
+        },
+        "children": [
+            {
+                "fvAEPg": {
+                    "attributes": {
+                        "dn": "uni/tn-{{tenant}}/ap-BigApp/epg-APP",
+                        "name": "APP",
+                        "rn": "epg-APP",
+                        "status": "created"
+                    },
+                    "children": [
+                        {
+                            "fvRsBd": {
+                                "attributes": {
+                                    "tnFvBDName": "APP",
+                                    "status": "created,modified"
+                                },
+                                "children": []
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "fvAEPg": {
+                    "attributes": {
+                        "dn": "uni/tn-{{tenant}}/ap-BigApp/epg-DB",
+                        "name": "DB",
+                        "rn": "epg-DB",
+                        "status": "created"
+                    },
+                    "children": [
+                        {
+                            "fvRsBd": {
+                                "attributes": {
+                                    "tnFvBDName": "DB",
+                                    "status": "created,modified"
+                                },
+                                "children": []
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "fvAEPg": {
+                    "attributes": {
+                        "dn": "uni/tn-{{tenant}}/ap-BigApp/epg-WEB",
+                        "name": "WEB",
+                        "rn": "epg-WEB",
+                        "status": "created"
+                    },
+                    "children": [
+                        {
+                            "fvRsBd": {
+                                "attributes": {
+                                    "tnFvBDName": "WEB",
+                                    "status": "created,modified"
+                                },
+                                "children": []
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}
+=======================

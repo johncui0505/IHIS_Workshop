@@ -1,0 +1,79 @@
+{
+    "changed": false,
+    "msg": "All items completed",
+    "results": [
+        {
+            "ansible_loop_var": "item",
+            "changed": false,
+            "failed": false,
+            "imdata": [
+                {
+                    "fvTenant": {
+                        "attributes": {
+                            "annotation": "",
+                            "childAction": "",
+                            "descr": "",
+                            "dn": "uni/tn-infra",
+                            "extMngdBy": "",
+                            "lcOwn": "local",
+                            "modTs": "2020-08-24T01:45:03.027+00:00",
+                            "monPolDn": "uni/tn-common/monepg-default",
+                            "name": "infra",
+                            "nameAlias": "",
+                            "ownerKey": "",
+                            "ownerTag": "",
+                            "status": "",
+                            "uid": "0",
+                            "userdom": "all"
+                        },
+                        "children": [
+                            {
+                                "healthInst": {
+                                    "attributes": {
+                                        "childAction": "",
+                                        "chng": "-13",
+                                        "cur": "56",
+                                        "maxSev": "cleared",
+                                        "prev": "65",
+                                        "rn": "health",
+                                        "status": "",
+                                        "twScore": "56",
+                                        "updTs": "2023-06-06T02:13:13.473+00:00"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
+            "invocation": {
+                "module_args": {
+                    "certificate_name": null,
+                    "content": null,
+                    "host": "10.106.236.54",
+                    "method": "get",
+                    "output_level": "normal",
+                    "output_path": null,
+                    "password": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER",
+                    "path": "/api/node/class/fvTenant.json?rsp-subtree-include=health,required&rsp-subtree-filter=le(healthInst.cur,\"90\")",
+                    "port": null,
+                    "private_key": null,
+                    "protocol": "http",
+                    "src": null,
+                    "timeout": 30,
+                    "use_proxy": true,
+                    "use_ssl": false,
+                    "user": "jiacui",
+                    "username": "jiacui",
+                    "validate_certs": false
+                }
+            },
+            "item": {
+                "score": 90
+            },
+            "status": 200,
+            "totalCount": 1
+        }
+    ],
+    "skipped": false
+}

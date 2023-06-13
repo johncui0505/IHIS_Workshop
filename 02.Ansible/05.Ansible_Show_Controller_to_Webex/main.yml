@@ -1,0 +1,38 @@
+---
+- hosts: aci
+  connection: local
+  gather_facts: no
+
+  vars:
+    apic_info: &apic_info
+      host:           "{{ aci_host }}"
+      user:           "{{ aci_user }}"
+      password:       "{{ aci_password }}"
+      validate_certs: "{{ aci_valid_cert }}" 
+      use_ssl:        "{{ aci_use_ssl }}" 
+
+  tasks:
+    - name: Query TopSystem
+      aci_rest:
+        <<: *apic_info
+        path: /api/node/class/topSystem.json?query-target-filter=eq(topSystem.role,"controller")&order-by=topSystem.podId|asc
+      register: fabricNode
+    - name: Convert to markdown
+      template: 
+        src:  "template/show_controller.j2"
+        dest: "show_controller.txt"
+    - name: Read Message Sending to Webex Space
+      debug:    msg="{{lookup('file', 'show_controller.txt') }}"
+      register: show_controller_report
+      no_log:   yes 
+    - name: Send Webex
+      community.general.cisco_webex:
+        recipient_type: roomId
+        recipient_id:   "{{ roomID }}"
+        msg_type:   text
+        personal_token: "{{ token }}"
+        msg:        "{{ show_controller_report.msg }}"
+
+
+
+        

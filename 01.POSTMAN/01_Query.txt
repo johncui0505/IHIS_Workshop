@@ -1,0 +1,34 @@
+=======================
+APIC_Login
+POST https://{{apic}}/api/aaaLogin.json
+BODY:
+{
+  "aaaUser":{
+    "attributes":{
+      "name":"{{username}}",
+      "pwd":"{{password}}"
+                 }
+            }
+}
+=======================
+
+=======================
+ALL_Faults
+GET https://{{apic}}//api/node/class/faultSummary.json?order-by=faultSummary.severity|desc
+=======================
+
+=======================
+Faults_Critical
+GET https://{{apic}}//api/node/class/faultSummary.json?query-target-filter=eq(faultSummary.severity,"critical")
+=======================
+
+=======================
+Controller_Details
+GET https://{{apic}}//api/node/class/topSystem.json?query-target-filter=eq(topSystem.role,"controller")&order-by=topSystem.podId|asc
+=======================
+
+=======================
+Fabric_Health_Score
+GET https://{{apic}}/api/node/class/topSystem.json?rsp-subtree-include=health,required&rsp-subtree-filter=le(healthInst.cur,"{{ health_score }}")
+=======================
+

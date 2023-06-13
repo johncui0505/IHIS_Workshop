@@ -1,0 +1,408 @@
+{
+	"info": {
+		"_postman_id": "40bcac9c-30de-45db-bc2a-9a0f074b8132",
+		"name": "IHIS_Demo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18194878"
+	},
+	"item": [
+		{
+			"name": "01_Query",
+			"item": [
+				{
+					"name": "APIC_Login",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"aaaUser\":{\n    \"attributes\":{\n      \"name\":\"{{username}}\",\n      \"pwd\":\"{{password}}\"\n                 }\n            }\n}"
+						},
+						"url": {
+							"raw": "https://{{apic}}/api/aaaLogin.json",
+							"protocol": "https",
+							"host": [
+								"{{apic}}"
+							],
+							"path": [
+								"api",
+								"aaaLogin.json"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All_Faults",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{apic}}/api/node/class/faultSummary.json?order-by=faultSummary.severity|desc",
+							"protocol": "https",
+							"host": [
+								"{{apic}}"
+							],
+							"path": [
+								"",
+								"api",
+								"node",
+								"class",
+								"faultSummary.json"
+							],
+							"query": [
+								{
+									"key": "order-by",
+									"value": "faultSummary.severity|desc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Faults_Critical",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{apic}}/api/node/class/faultSummary.json?query-target-filter=eq(faultSummary.severity,\"critical\")",
+							"protocol": "https",
+							"host": [
+								"{{apic}}"
+							],
+							"path": [
+								"",
+								"api",
+								"node",
+								"class",
+								"faultSummary.json"
+							],
+							"query": [
+								{
+									"key": "query-target-filter",
+									"value": "eq(faultSummary.severity,\"critical\")"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Controller_Details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{apic}}/api/node/class/topSystem.json?query-target-filter=eq(topSystem.role,\"controller\")&order-by=topSystem.podId|asc",
+							"protocol": "https",
+							"host": [
+								"{{apic}}"
+							],
+							"path": [
+								"",
+								"api",
+								"node",
+								"class",
+								"topSystem.json"
+							],
+							"query": [
+								{
+									"key": "query-target-filter",
+									"value": "eq(topSystem.role,\"controller\")"
+								},
+								{
+									"key": "order-by",
+									"value": "topSystem.podId|asc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fabric_Health_Score",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{apic}}/api/node/class/topSystem.json?rsp-subtree-include=health,required&rsp-subtree-filter=le(healthInst.cur,\"{{ health_score }}\")",
+							"protocol": "https",
+							"host": [
+								"{{apic}}"
+							],
+							"path": [
+								"api",
+								"node",
+								"class",
+								"topSystem.json"
+							],
+							"query": [
+								{
+									"key": "rsp-subtree-include",
+									"value": "health,required"
+								},
+								{
+									"key": "rsp-subtree-filter",
+									"value": "le(healthInst.cur,\"{{ health_score }}\")"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "02_3Tier_App",
+			"item": [
+				{
+					"name": "APIC_Login",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"aaaUser\":{\n    \"attributes\":{\n      \"name\":\"{{username}}\",\n      \"pwd\":\"{{password}}\"\n                 }\n            }\n}"
+						},
+						"url": {
+							"raw": "https://{{apic}}/api/aaaLogin.json",
+							"protocol": "https",
+							"host": [
+								"{{apic}}"
+							],
+							"path": [
+								"api",
+								"aaaLogin.json"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateTenant",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"fvTenant\": {\n        \"attributes\": {\n            \"dn\": \"uni/tn-{{tenant}}\",\n            \"name\": \"{{tenant}}\",\n            \"rn\": \"tn-{{tenant}}\",\n            \"status\": \"created\"\n        },\n        \"children\": []\n    }\n}"
+						},
+						"url": {
+							"raw": "https://{{apic}}/api/node/mo/uni/tn-{{tenant}}.json",
+							"protocol": "https",
+							"host": [
+								"{{apic}}"
+							],
+							"path": [
+								"api",
+								"node",
+								"mo",
+								"uni",
+								"tn-{{tenant}}.json"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateVRF",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"fvCtx\": {\n        \"attributes\": {\n            \"dn\": \"uni/tn-{{tenant}}/ctx-{{tenant}}-Prod\",\n            \"name\": \"{{tenant}}-Prod\",\n            \"rn\": \"ctx-{{tenant}}-Prod\",\n            \"status\": \"created\"\n        },\n        \"children\": []\n    }\n}"
+						},
+						"url": {
+							"raw": "https://{{apic}}/api/node/mo/uni/tn-{{tenant}}/ctx-{{tenant}}-Prod.json",
+							"protocol": "https",
+							"host": [
+								"{{apic}}"
+							],
+							"path": [
+								"api",
+								"node",
+								"mo",
+								"uni",
+								"tn-{{tenant}}",
+								"ctx-{{tenant}}-Prod.json"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BD-DB",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"fvBD\": {\n        \"attributes\": {\n            \"dn\": \"uni/tn-{{tenant}}/BD-DB\",\n            \"mac\": \"00:22:BD:F8:19:FF\",\n            \"name\": \"DB\",\n            \"rn\": \"BD-DB\",\n            \"status\": \"created\"\n        },\n        \"children\": [\n            {\n                \"fvSubnet\": {\n                    \"attributes\": {\n                        \"dn\": \"uni/tn-{{tenant}}/BD-DB/subnet-[10.5.2.1/24]\",\n                        \"ctrl\": \"\",\n                        \"ip\": \"10.5.2.1/24\",\n                        \"rn\": \"subnet-[10.5.2.1/24]\",\n                        \"status\": \"created\"\n                    },\n                    \"children\": []\n                }\n            },\n            {\n                \"fvRsCtx\": {\n                    \"attributes\": {\n                        \"tnFvCtxName\": \"{{tenant}}-Prod\",\n                        \"status\": \"created,modified\"\n                    },\n                    \"children\": []\n                }\n            }\n        ]\n    }\n}"
+						},
+						"url": {
+							"raw": "https://{{apic}}/api/node/mo/uni/tn-{{tenant}}/BD-DB.json",
+							"protocol": "https",
+							"host": [
+								"{{apic}}"
+							],
+							"path": [
+								"api",
+								"node",
+								"mo",
+								"uni",
+								"tn-{{tenant}}",
+								"BD-DB.json"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BD-WEB",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"fvBD\": {\n        \"attributes\": {\n            \"dn\": \"uni/tn-{{tenant}}/BD-WEB\",\n            \"mac\": \"00:22:BD:F8:19:FF\",\n            \"name\": \"WEB\",\n            \"rn\": \"BD-WEB\",\n            \"status\": \"created\"\n        },\n        \"children\": [\n            {\n                \"fvSubnet\": {\n                    \"attributes\": {\n                        \"dn\": \"uni/tn-{{tenant}}/BD-WEB/subnet-[10.5.1.1/24]\",\n                        \"ctrl\": \"\",\n                        \"ip\": \"10.5.1.1/24\",\n                        \"rn\": \"subnet-[10.5.1.1/24]\",\n                        \"status\": \"created\"\n                    },\n                    \"children\": []\n                }\n            },\n            {\n                \"fvRsCtx\": {\n                    \"attributes\": {\n                        \"tnFvCtxName\": \"{{tenant}}-Prod\",\n                        \"status\": \"created,modified\"\n                    },\n                    \"children\": []\n                }\n            }\n        ]\n    }\n}"
+						},
+						"url": {
+							"raw": "https://{{apic}}/api/node/mo/uni/tn-{{tenant}}/BD-WEB.json",
+							"protocol": "https",
+							"host": [
+								"{{apic}}"
+							],
+							"path": [
+								"api",
+								"node",
+								"mo",
+								"uni",
+								"tn-{{tenant}}",
+								"BD-WEB.json"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BD-APP",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"fvBD\": {\n        \"attributes\": {\n            \"dn\": \"uni/tn-{{tenant}}/BD-APP\",\n            \"mac\": \"00:22:BD:F8:19:FF\",\n            \"name\": \"APP\",\n            \"rn\": \"BD-APP\",\n            \"status\": \"created\"\n        },\n        \"children\": [\n            {\n                \"fvSubnet\": {\n                    \"attributes\": {\n                        \"dn\": \"uni/tn-{{tenant}}/BD-APP/subnet-[10.5.3.1/24]\",\n                        \"ctrl\": \"\",\n                        \"ip\": \"10.5.3.1/24\",\n                        \"rn\": \"subnet-[10.5.3.1/24]\",\n                        \"status\": \"created\"\n                    },\n                    \"children\": []\n                }\n            },\n            {\n                \"fvRsCtx\": {\n                    \"attributes\": {\n                        \"tnFvCtxName\": \"{{tenant}}-Prod\",\n                        \"status\": \"created,modified\"\n                    },\n                    \"children\": []\n                }\n            }\n        ]\n    }\n}"
+						},
+						"url": {
+							"raw": "https://{{apic}}/api/node/mo/uni/tn-{{tenant}}/BD-APP.json",
+							"protocol": "https",
+							"host": [
+								"{{apic}}"
+							],
+							"path": [
+								"api",
+								"node",
+								"mo",
+								"uni",
+								"tn-{{tenant}}",
+								"BD-APP.json"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateANP",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"fvAp\": {\n        \"attributes\": {\n            \"dn\": \"uni/tn-{{tenant}}/ap-BigApp\",\n            \"name\": \"BigApp\",\n            \"rn\": \"ap-BigApp\",\n            \"status\": \"created\"\n        },\n        \"children\": [\n            {\n                \"fvAEPg\": {\n                    \"attributes\": {\n                        \"dn\": \"uni/tn-{{tenant}}/ap-BigApp/epg-APP\",\n                        \"name\": \"APP\",\n                        \"rn\": \"epg-APP\",\n                        \"status\": \"created\"\n                    },\n                    \"children\": [\n                        {\n                            \"fvRsBd\": {\n                                \"attributes\": {\n                                    \"tnFvBDName\": \"APP\",\n                                    \"status\": \"created,modified\"\n                                },\n                                \"children\": []\n                            }\n                        }\n                    ]\n                }\n            },\n            {\n                \"fvAEPg\": {\n                    \"attributes\": {\n                        \"dn\": \"uni/tn-{{tenant}}/ap-BigApp/epg-DB\",\n                        \"name\": \"DB\",\n                        \"rn\": \"epg-DB\",\n                        \"status\": \"created\"\n                    },\n                    \"children\": [\n                        {\n                            \"fvRsBd\": {\n                                \"attributes\": {\n                                    \"tnFvBDName\": \"DB\",\n                                    \"status\": \"created,modified\"\n                                },\n                                \"children\": []\n                            }\n                        }\n                    ]\n                }\n            },\n            {\n                \"fvAEPg\": {\n                    \"attributes\": {\n                        \"dn\": \"uni/tn-{{tenant}}/ap-BigApp/epg-WEB\",\n                        \"name\": \"WEB\",\n                        \"rn\": \"epg-WEB\",\n                        \"status\": \"created\"\n                    },\n                    \"children\": [\n                        {\n                            \"fvRsBd\": {\n                                \"attributes\": {\n                                    \"tnFvBDName\": \"WEB\",\n                                    \"status\": \"created,modified\"\n                                },\n                                \"children\": []\n                            }\n                        }\n                    ]\n                }\n            }\n        ]\n    }\n}"
+						},
+						"url": {
+							"raw": "https://{{apic}}/api/node/mo/uni/tn-{{tenant}}/ap-BigApp.json",
+							"protocol": "https",
+							"host": [
+								"{{apic}}"
+							],
+							"path": [
+								"api",
+								"node",
+								"mo",
+								"uni",
+								"tn-{{tenant}}",
+								"ap-BigApp.json"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
